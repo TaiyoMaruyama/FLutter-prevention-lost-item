@@ -55,10 +55,10 @@ class _mainPageScreenState extends State<mainPageScreen> {
           const Divider(),
           ...checkBoxList.map(
             (e) => ListTile(
-              onTap: () => onAllClicked(e),
+              onTap: () => onItemClicked(e),
               leading: Checkbox(
                 value: e.value,
-                onChanged: (bool? value) => onAllClicked(e),
+                onChanged: (bool? value) => onItemClicked(e),
               ),
               title: Text(e.title),
             ),
@@ -69,8 +69,25 @@ class _mainPageScreenState extends State<mainPageScreen> {
   }
 
   onAllClicked(checkBoxState Item) {
+    final newValue = !Item.value;
     setState(() {
-      Item.value = !Item.value;
+      Item.value = newValue;
+      checkBoxList.forEach((element) {
+        element.value = newValue;
+      });
+    });
+  }
+
+  onItemClicked(checkBoxState Item) {
+    final newValue = !Item.value;
+    setState(() {
+      Item.value = newValue;
+      if (!newValue) {
+        allChecked.value = false;
+      }else{
+        final allListChecked = checkBoxList.every((element) => element.value);
+        allChecked.value = allListChecked;
+      }
     });
   }
 }
