@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'model.dart';
+
 void main() => runApp(mainPage());
 
 class mainPage extends StatelessWidget {
@@ -8,6 +10,10 @@ class mainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.red,
+        unselectedWidgetColor: Colors.black,
+      ),
       home: mainPageScreen(),
     );
   }
@@ -21,55 +27,50 @@ class mainPageScreen extends StatefulWidget {
 }
 
 class _mainPageScreenState extends State<mainPageScreen> {
-  bool _checked = false;
+  final allChecked = checkBoxState('All checked', false);
+  final checkBoxList = [
+    checkBoxState('Checked01', false),
+    checkBoxState('Checked02', false),
+    checkBoxState('Checked03', false),
+    checkBoxState('Checked04', false),
+    checkBoxState('Checked05', false),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
-        child: Column(
-          children: [
-            Text(
-              '忘れものしそうなものに予めチェックを入れてください。',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+      appBar: AppBar(
+        title: Text('title'),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            onTap: () => onAllClicked(allChecked),
+            leading: Checkbox(
+              value: allChecked.value,
+              onChanged: (bool? value) => onAllClicked(allChecked),
+            ),
+            title: Text(allChecked.title),
+          ),
+          const Divider(),
+          ...checkBoxList.map(
+            (e) => ListTile(
+              onTap: () => onAllClicked(e),
+              leading: Checkbox(
+                value: e.value,
+                onChanged: (bool? value) => onAllClicked(e),
               ),
+              title: Text(e.title),
             ),
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(10.0, 10.0),
-                        color: Colors.black,
-                      ),
-                    ],
-                    color: Color(0xFFFFE0B2),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: CheckboxListTile(
-                    title: Text('wallet'),
-                    secondary: Icon(Icons.account_circle),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    value: _checked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _checked = value!;
-                      });
-                    },
-                    checkColor: Colors.white,
-                    activeColor: Colors.orange,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
+  }
+
+  onAllClicked(checkBoxState Item) {
+    setState(() {
+      Item.value = !Item.value;
+    });
   }
 }
