@@ -11,7 +11,7 @@ class mainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.red,
+        primaryColor: Colors.orange,
         unselectedWidgetColor: Colors.black,
       ),
       home: mainPageScreen(),
@@ -27,6 +27,7 @@ class mainPageScreen extends StatefulWidget {
 }
 
 class _mainPageScreenState extends State<mainPageScreen> {
+  List selectedList = [];
   final allChecked = checkBoxState('全部忘れそう・・・', false);
   final checkBoxList = [
     checkBoxState('財布', false),
@@ -38,6 +39,8 @@ class _mainPageScreenState extends State<mainPageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String errorText = '';
+
     return Scaffold(
       body: ListView(
         children: [
@@ -51,6 +54,7 @@ class _mainPageScreenState extends State<mainPageScreen> {
           ListTile(
             onTap: () => onAllClicked(allChecked),
             leading: Checkbox(
+              activeColor: Colors.orange,
               value: allChecked.value,
               onChanged: (bool? value) => onAllClicked(allChecked),
             ),
@@ -61,6 +65,7 @@ class _mainPageScreenState extends State<mainPageScreen> {
             (e) => ListTile(
               onTap: () => onItemClicked(e),
               leading: Checkbox(
+                activeColor: Colors.orange,
                 value: e.value,
                 onChanged: (bool? value) => onItemClicked(e),
               ),
@@ -71,9 +76,20 @@ class _mainPageScreenState extends State<mainPageScreen> {
             margin: const EdgeInsets.all(50.0),
             child: ElevatedButton(
               onPressed: () {
-                print('clicked');
+                if (checkBoxList.any((element) => element.value) != true) {
+                  null;
+                } else {
+                  print(selectedList);
+                }
               },
               child: Text('次へ'),
+              style: ElevatedButton.styleFrom(
+                elevation: 0.0,
+                backgroundColor:
+                    checkBoxList.any((element) => element.value) != true
+                        ? Colors.grey
+                        : Colors.orange,
+              ),
             ),
           ),
         ],
@@ -93,14 +109,21 @@ class _mainPageScreenState extends State<mainPageScreen> {
 
   onItemClicked(checkBoxState Item) {
     final newValue = !Item.value;
-    setState(() {
-      Item.value = newValue;
-      if (!newValue) {
-        allChecked.value = false;
-      } else {
-        final allListChecked = checkBoxList.every((element) => element.value);
-        allChecked.value = allListChecked;
-      }
-    });
+    setState(
+      () {
+        Item.value = newValue;
+        if (newValue){
+          selectedList.add(Item.title);
+        }else{
+          selectedList.remove(Item.title);
+        }
+        if (!newValue) {
+          allChecked.value = false;
+        } else {
+          final allListChecked = checkBoxList.every((element) => element.value);
+          allChecked.value = allListChecked;
+        }
+      },
+    );
   }
 }
