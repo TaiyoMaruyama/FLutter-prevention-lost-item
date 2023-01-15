@@ -27,23 +27,27 @@ class mainPageScreen extends StatefulWidget {
 }
 
 class _mainPageScreenState extends State<mainPageScreen> {
-  final allChecked = checkBoxState('All checked', false);
+  final allChecked = checkBoxState('全部忘れそう・・・', false);
   final checkBoxList = [
-    checkBoxState('Checked01', false),
-    checkBoxState('Checked02', false),
-    checkBoxState('Checked03', false),
-    checkBoxState('Checked04', false),
-    checkBoxState('Checked05', false),
+    checkBoxState('財布', false),
+    checkBoxState('カギ', false),
+    checkBoxState('カバン', false),
+    checkBoxState('カード', false),
+    checkBoxState('傘', false),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('title'),
-      ),
       body: ListView(
         children: [
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            child: const Text(
+              '忘れそうなものに、予めチェックを入れてください。',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
           ListTile(
             onTap: () => onAllClicked(allChecked),
             leading: Checkbox(
@@ -62,7 +66,16 @@ class _mainPageScreenState extends State<mainPageScreen> {
               ),
               title: Text(e.title),
             ),
-          )
+          ),
+          Container(
+            margin: const EdgeInsets.all(50.0),
+            child: ElevatedButton(
+              onPressed: () {
+                print('clicked');
+              },
+              child: Text('次へ'),
+            ),
+          ),
         ],
       ),
     );
@@ -84,7 +97,7 @@ class _mainPageScreenState extends State<mainPageScreen> {
       Item.value = newValue;
       if (!newValue) {
         allChecked.value = false;
-      }else{
+      } else {
         final allListChecked = checkBoxList.every((element) => element.value);
         allChecked.value = allListChecked;
       }
