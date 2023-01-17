@@ -73,20 +73,29 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   icon: const Icon(Icons.arrow_back_ios),
+                ),
+                IconButton(
+                  onPressed: () {
+                    //endSidebar
+                  },
+                  icon: const Icon(Icons.menu_outlined),
                 ),
               ],
             ),
             SizedBox(
-              height: 100,
+              height: 120,
               width: double.infinity,
               child: Card(
                 elevation: 10.0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -107,12 +116,15 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 10.0,
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: logTimeLIst.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    margin: const EdgeInsets.only(top: 5.0),
+                    margin: const EdgeInsets.only(bottom: 5.0),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15.0, vertical: 10.0),
                     decoration: BoxDecoration(
@@ -121,13 +133,19 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     ),
                     child: Row(
                       children: [
-                        Text(
-                          logTimeLIst[index],
-                          style: customFont02,
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            logTimeLIst[index],
+                            style: customFont02,
+                          ),
                         ),
-                        Text(
-                          logLocationList[index],
-                          style: customFont02,
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            logLocationList[index],
+                            style: customFont02,
+                          ),
                         ),
                       ],
                     ),
