@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'lostLog.dart';
+import '../lostLog.dart';
 import 'model.dart';
 
 class mainPageScreen extends StatefulWidget {
