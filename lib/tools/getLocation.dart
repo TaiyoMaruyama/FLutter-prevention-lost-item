@@ -16,7 +16,7 @@ class _getLocationState extends State<getLocation> {
   late double Longitude;
   late Timer timered;
   late int getLocationCounter = 0;
-  late double twoPointDistance;
+  double twoPointDistance = 0;
   double betweentwoPointspeed = 0;
   List<double> LatitudePointList = [];
   List<double> LongitudePointList = [];
