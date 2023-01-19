@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,8 +17,8 @@ class _getLocationState extends State<getLocation> {
   late Timer timered;
   late int getLocationCounter = 0;
   late double twoPointDistance;
-  List LatitudePointList = [];
-  List LongitudePoinntList = [];
+  List<double> LatitudePointList = [];
+  List<double> LongitudePointList = [];
 
   @override
   void initState() {
@@ -39,43 +40,41 @@ class _getLocationState extends State<getLocation> {
         desiredAccuracy: LocationAccuracy.low);
     Latitude = position.latitude;
     Longitude = position.longitude;
-    LatitudePointList.add(Latitude);
-    LongitudePoinntList.add(Longitude);
   }
 
-  void getEverTimeLocation() {
-    timered = Timer.periodic(const Duration(seconds: 3), (timer) {
+  void getEverTimeLocation() async {
+    timered = Timer.periodic(const Duration(seconds: 2), (timer) {
       getLocation();
       getLocationCounter++;
-      if(getLocationCounter == 1){
+      if (getLocationCounter <= 2) {
         LatitudePointList.add(Latitude);
-        LongitudePoinntList.add(Longitude);
-      }else{
+        LongitudePointList.add(Longitude);
+      } else {
         LatitudePointList.add(Latitude);
-        LongitudePoinntList.add(Longitude);
-        LatitudePointList.removeAt(0);
-        LongitudePoinntList.removeAt(0);
+        LongitudePointList.add(Longitude);
+        LatitudePointList.removeLast();
+        LongitudePointList.removeLast();
+        double latitudeDifference = LatitudePointList[1] - LatitudePointList[0];
+        double longitudeDifference = LongitudePointList[1] - LongitudePointList[0];
+        twoPointDistance = sqrt(pow(latitudeDifference, 2) + pow(longitudeDifference, 2));
+        print(twoPointDistance.toString());
       }
-      print(LongitudePoinntList);
     });
     timered;
   }
 
-  // void distanceCalculation(){
-  //   twoPointDistance =
-  // }
+  void distanceCalculation() {}
 
-  void timerStop (){
+  void timerStop() {
     timered!.cancel();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ElevatedButton(
-        onPressed: (){
-
+        onPressed: () {
+          timerStop();
         },
         child: const Text('timer stop!'),
       ),
