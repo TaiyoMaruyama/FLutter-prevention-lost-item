@@ -17,6 +17,7 @@ class _getLocationState extends State<getLocation> {
   late Timer timered;
   late int getLocationCounter = 0;
   late double twoPointDistance;
+  double betweentwoPointspeed = 0;
   List<double> LatitudePointList = [];
   List<double> LongitudePointList = [];
 
@@ -43,7 +44,7 @@ class _getLocationState extends State<getLocation> {
   }
 
   void getEverTimeLocation() async {
-    timered = Timer.periodic(const Duration(seconds: 2), (timer) {
+    timered = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLocation();
       getLocationCounter++;
       if (getLocationCounter <= 2) {
@@ -57,13 +58,13 @@ class _getLocationState extends State<getLocation> {
         double latitudeDifference = LatitudePointList[1] - LatitudePointList[0];
         double longitudeDifference = LongitudePointList[1] - LongitudePointList[0];
         twoPointDistance = sqrt(pow(latitudeDifference, 2) + pow(longitudeDifference, 2));
-        print(twoPointDistance.toString());
+        betweentwoPointspeed = twoPointDistance / 2 ;
+        setState(() {});
       }
     });
     timered;
+    Text(betweentwoPointspeed.toString());
   }
-
-  void distanceCalculation() {}
 
   void timerStop() {
     timered!.cancel();
@@ -72,11 +73,23 @@ class _getLocationState extends State<getLocation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ElevatedButton(
-        onPressed: () {
-          timerStop();
-        },
-        child: const Text('timer stop!'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(Latitude.toString()),
+            Text(Longitude.toString()),
+            Text(twoPointDistance.toString()),
+            Text(getLocationCounter.toString()),
+            Text(betweentwoPointspeed.toString()),
+            ElevatedButton(
+              onPressed: () {
+                timerStop();
+              },
+              child: const Text('timer stop!'),
+            ),
+          ],
+        ),
       ),
     );
   }
