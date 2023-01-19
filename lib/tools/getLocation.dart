@@ -13,6 +13,11 @@ class getLocation extends StatefulWidget {
 class _getLocationState extends State<getLocation> {
   late double Latitude;
   late double Longitude;
+  late Timer timered;
+  late int getLocationCounter = 0;
+  late double twoPointDistance;
+  List LatitudePointList = [];
+  List LongitudePoinntList = [];
 
   @override
   void initState() {
@@ -34,12 +39,34 @@ class _getLocationState extends State<getLocation> {
         desiredAccuracy: LocationAccuracy.low);
     Latitude = position.latitude;
     Longitude = position.longitude;
+    LatitudePointList.add(Latitude);
+    LongitudePoinntList.add(Longitude);
   }
 
   void getEverTimeLocation() {
-    Timer timered = Timer.periodic(const Duration(seconds: 10), (timer) {
+    timered = Timer.periodic(const Duration(seconds: 3), (timer) {
       getLocation();
+      getLocationCounter++;
+      if(getLocationCounter == 1){
+        LatitudePointList.add(Latitude);
+        LongitudePoinntList.add(Longitude);
+      }else{
+        LatitudePointList.add(Latitude);
+        LongitudePoinntList.add(Longitude);
+        LatitudePointList.removeAt(0);
+        LongitudePoinntList.removeAt(0);
+      }
+      print(LongitudePoinntList);
     });
+    timered;
+  }
+
+  // void distanceCalculation(){
+  //   twoPointDistance =
+  // }
+
+  void timerStop (){
+    timered!.cancel();
   }
 
 
@@ -47,7 +74,9 @@ class _getLocationState extends State<getLocation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ElevatedButton(
-        onPressed: (){},
+        onPressed: (){
+
+        },
         child: const Text('timer stop!'),
       ),
     );
