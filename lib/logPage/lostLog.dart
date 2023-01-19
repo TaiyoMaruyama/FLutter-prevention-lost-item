@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
+import 'package:prevention_lost_item/tools/getLocation.dart';
+
+import 'logPageBrain/topCardWidget.dart';
 
 class LostItemLogPage extends StatefulWidget {
   LostItemLogPage(this.LostItemList);
@@ -23,42 +26,8 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     '09:00',
     '09:00',
     '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
-    '09:00',
   ];
   List logLocationList = [
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
-    '大阪府西淀川区です。',
     '大阪府西淀川区です。',
     '大阪府西淀川区です。',
     '大阪府西淀川区です。',
@@ -83,7 +52,8 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    //endSidebar
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => getLocation()));
                   },
                   icon: const Icon(Icons.menu_outlined),
                 ),
@@ -92,29 +62,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
             SizedBox(
               height: 120,
               width: double.infinity,
-              child: Card(
-                elevation: 10.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '今回のお出かけは、',
-                      style: customFont02,
-                    ),
-                    Text(
-                      lostItem(widget.LostItemList),
-                      style: customFont01,
-                    ),
-                    Text(
-                      'を忘れないようにしましょう！',
-                      style: customFont02,
-                    ),
-                  ],
-                ),
-              ),
+              child: LogPageTopCard(widget: widget),
             ),
             SizedBox(
               height: 10.0,
@@ -159,3 +107,4 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     );
   }
 }
+
