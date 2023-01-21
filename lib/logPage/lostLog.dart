@@ -111,8 +111,9 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   }
 
   void logAction(bool judge) {
-    if (judge == true) {
+    if (judge == false) {
       logLocationList.add(Latitude);
+      judge = true;
     }
   }
 
@@ -180,6 +181,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
             Expanded(flex: 1, child: Text(Latitude.toString())),
             Expanded(flex: 1, child: Text(Longitude.toString())),
             Expanded(flex: 1, child: Text(speedAverage.toString())),
+            Expanded(flex: 1, child: Text(averageSpeedList.toString())),
           ],
         ),
       ),
