@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -24,6 +25,7 @@ lostItem(List lists) {
 }
 
 class _LostItemLogPageState extends State<LostItemLogPage> {
+  List logTimeList = [];
   List logLocationList = [];
 
   double Latitude = 0;
@@ -63,7 +65,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   }
 
   void getEverTimeLocation() {
-    timered = Timer.periodic(const Duration(seconds: 3), (timer) {
+    timered = Timer.periodic(const Duration(seconds: 1), (timer) {
       getLocation();
       getLocationCounter++;
       if (getLocationCounter <= 2) {
@@ -111,6 +113,8 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
 
   void logAction(bool judge) async {
     if (judge == false) {
+      DateTime now = DateTime.now();
+      logTimeList.add(now.toString().substring(11, 16));
       logLocationList.add(Latitude);
       judge = true;
     }
@@ -166,11 +170,8 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     ),
                     child: Row(
                       children: [
-                        Text('09;00'),
-                        Text(
-                          logLocationList[index].toString(),
-                          style: customFont02,
-                        ),
+                        Expanded(flex: 2, child: Text(logTimeList[index], style: customFont02)),
+                        Expanded(flex: 4, child: Text(logLocationList[index].toString(), style: customFont02)),
                       ],
                     ),
                   );
