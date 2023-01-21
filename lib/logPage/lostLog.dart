@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
-import 'package:prevention_lost_item/tools/getLocation.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -110,7 +109,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     }
   }
 
-  void logAction(bool judge) {
+  void logAction(bool judge) async {
     if (judge == false) {
       logLocationList.add(Latitude);
       judge = true;
@@ -153,7 +152,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
               height: 10.0,
             ),
             Expanded(
-              flex: 9,
+              flex: 10,
               child: ListView.builder(
                 itemCount: logLocationList.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -167,11 +166,11 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     ),
                     child: Row(
                       children: [
+                        Text('09;00'),
                         Text(
                           logLocationList[index].toString(),
                           style: customFont02,
                         ),
-                        Text(Latitude.toString()),
                       ],
                     ),
                   );
