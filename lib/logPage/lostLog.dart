@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -65,7 +64,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   }
 
   void getEverTimeLocation() {
-    timered = Timer.periodic(const Duration(seconds: 1), (timer) {
+    timered = Timer.periodic(const Duration(seconds: 8), (timer) {
       getLocation();
       getLocationCounter++;
       if (getLocationCounter <= 2) {
@@ -152,11 +151,11 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
               width: double.infinity,
               child: LogPageTopCard(widget: widget),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Expanded(
-              flex: 10,
+              flex: 20,
               child: ListView.builder(
                 itemCount: logLocationList.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -165,13 +164,26 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15.0, vertical: 10.0),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 6.0,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Row(
                       children: [
-                        Expanded(flex: 2, child: Text(logTimeList[index], style: customFont02)),
-                        Expanded(flex: 4, child: Text(logLocationList[index].toString(), style: customFont02)),
+                        Expanded(
+                            flex: 2,
+                            child:
+                                Text(logTimeList[index], style: customFont02)),
+                        Expanded(
+                            flex: 4,
+                            child: Text(logLocationList[index].toString(),
+                                style: customFont02)),
                       ],
                     ),
                   );
