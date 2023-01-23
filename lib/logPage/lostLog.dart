@@ -48,7 +48,6 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     getEverTimeLocation();
   }
 
-  // Geolocatorで現在地の取得
   void getLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -192,7 +191,6 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
             ),
             Expanded(flex: 1, child: Text(Latitude.toString())),
             Expanded(flex: 1, child: Text(Longitude.toString())),
-            Expanded(flex: 1, child: Text(speedAverage.toString())),
             Expanded(flex: 1, child: Text(averageSpeedList.toString())),
           ],
         ),
