@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
+import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -48,22 +49,48 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     getEverTimeLocation();
   }
 
+
   void getLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('現在地を取得できません。');
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
       }
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low);
-    Latitude = position.latitude;
-    Longitude = position.longitude;
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    _locationData = await location.getLocation();
+    Latitude = _locationData.latitude!;
+    Longitude = _locationData.longitude!;
+
+    // LocationPermission permission = await Geolocator.checkPermission();
+    // if (permission == LocationPermission.denied) {
+    //   permission = await Geolocator.requestPermission();
+    //   if (permission == LocationPermission.denied) {
+    //     return Future.error('現在地を取得できません。');
+    //   }
+    // }
+    // Position position = await Geolocator.getCurrentPosition();
+    // Latitude = position.latitude;
+    // Longitude = position.longitude;
   }
 
   void getEverTimeLocation() {
     timered = Timer.periodic(const Duration(seconds: 8), (timer) {
+      print(Longitude.toString());
+      print(Latitude.toString());
       getLocation();
       getLocationCounter++;
       if (getLocationCounter <= 2) {
