@@ -3,7 +3,6 @@ import 'package:prevention_lost_item/tools/customFonts.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
-
 import 'package:geolocator/geolocator.dart';
 import 'logPageBrain/topCardWidget.dart';
 
@@ -42,13 +41,15 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   late int speedRankAfter;
   bool judge = true;
 
+  //for test
+  List LatitudeLatitudeList = [];
+
   @override
   void initState() {
     super.initState();
     getLocation();
     getEverTimeLocation();
   }
-
 
   void getLocation() async {
     Location location = new Location();
@@ -72,25 +73,13 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
       }
     }
     _locationData = await location.getLocation();
-    Latitude = _locationData.latitude!;
+    Latitude = _locationData.speed!;
     Longitude = _locationData.longitude!;
-
-    // LocationPermission permission = await Geolocator.checkPermission();
-    // if (permission == LocationPermission.denied) {
-    //   permission = await Geolocator.requestPermission();
-    //   if (permission == LocationPermission.denied) {
-    //     return Future.error('現在地を取得できません。');
-    //   }
-    // }
-    // Position position = await Geolocator.getCurrentPosition();
-    // Latitude = position.latitude;
-    // Longitude = position.longitude;
+    LatitudeLatitudeList.add(Latitude);
   }
 
   void getEverTimeLocation() {
     timered = Timer.periodic(const Duration(seconds: 8), (timer) {
-      print(Longitude.toString());
-      print(Latitude.toString());
       getLocation();
       getLocationCounter++;
       if (getLocationCounter <= 2) {
@@ -181,7 +170,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
               height: 10.0,
             ),
             Expanded(
-              flex: 20,
+              flex: 10,
               child: ListView.builder(
                 itemCount: logLocationList.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -216,9 +205,29 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 },
               ),
             ),
-            Expanded(flex: 1, child: Text(Latitude.toString())),
+
+            //for test
+            Expanded(
+              flex: 8,
+              child: ListView.builder(
+                itemCount: LatitudeLatitudeList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    child: Text(
+                        LatitudeLatitudeList[index].toString(),
+                        style: customFont02,
+                    ),
+                  );
+                },
+              ),
+            ),
+            //test end
+
+            Expanded(
+                flex: 1, child: Text('speed : ${Latitude.toString()} m/s')),
             Expanded(flex: 1, child: Text(Longitude.toString())),
             Expanded(flex: 1, child: Text(averageSpeedList.toString())),
+            Expanded(flex: 1, child: Text(getLocationCounter.toString())),
           ],
         ),
       ),
