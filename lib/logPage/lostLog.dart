@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
 import 'package:location/location.dart';
 import 'dart:async';
-import 'dart:math';
-import 'package:geolocator/geolocator.dart';
 import 'logPageBrain/topCardWidget.dart';
 
 class LostItemLogPage extends StatefulWidget {
@@ -28,14 +26,26 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   void initState() {
     super.initState();
     getLocationAndSpeed();
+    getLocationEveryTime();
   }
 
   //List
-  late List speedList;
-  late List latitudeList;
-  late List longitudeList;
+  List speedList = [];
+  List latitudeList = [];
+  List longitudeList = [];
+  List timeList = [];
 
+  //these are lists for result.
+  List speedLogList = [];
+  List latitudeLogList = [];
+  List longitudeLogList = [];
+  List timeLogList = [];
+
+  //use in judgeSpeedBrain and judgeSpeed.
   late Timer timered;
+  int beforeSpeedRank = 0;
+  late int nowSpeedRank = 0;
+  bool judge = true;
 
   //get location and then speed function.
   void getLocationAndSpeed() async {
@@ -63,136 +73,57 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     speedList.add(locationData.speed);
     latitudeList.add(locationData.latitude);
     longitudeList.add(locationData.longitude);
+    timeList.add(DateTime.now().toString().substring(11, 16));
   }
 
   //get every time location function.
-  void getLocationEveryTime () {
-    timered = Timer.periodic(const Duration(seconds: 10), (timer) {
+  void getLocationEveryTime() {
+    timered = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLocationAndSpeed();
+      judgeSpeed();
+      print(longitudeList);
+      setState(() {});
     });
   }
 
   //judge speed rank.
-  void judgeSpeed () {
-
+  void judgeSpeed() {
+    List compareList;
+    double compareListAverage;
+    if (speedList.length > 8) {
+      compareList = speedList.sublist(0, 6);
+      compareListAverage =
+          compareList.reduce((value, element) => value + element) / 7;
+      judgeSpeedBrain(compareListAverage);
+      if (judge == false) {
+        speedLogList.add(speedList[3]);
+        latitudeLogList.add(latitudeList[3]);
+        longitudeLogList.add(longitudeList[3]);
+        timeLogList.add(timeList[3]);
+      }
+      judge = true;
+      speedLogList.removeRange(0, 6);
+      latitudeLogList.removeRange(0, 6);
+      longitudeLogList.removeRange(0, 6);
+      timeList.removeRange(0, 6);
+    }
   }
 
-
-
-
-
-  // List logTimeList = [];
-  // List logLocationList = [];
-  //
-  // double Latitude = 0;
-  // double Longitude = 0;
-  // late Timer timered;
-  // late int getLocationCounter = 0;
-  // double twoPointDistance = 0;
-  // double betweenTwoPointSpeed = 0;
-  // List<double> LatitudePointList = [];
-  // List<double> LongitudePointList = [];
-  // List<double> averageSpeedList = [];
-  // double speedAverage = 0;
-  // int speedRankBefore = 0;
-  // late int speedRankAfter;
-  // bool judge = true;
-  //
-  // //for test
-  // List LatitudeLatitudeList = [];
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getLocation();
-  //   getEverTimeLocation();
-  // }
-  // void getLocation() async {
-  //   Location location = new Location();
-  //
-  //   bool _serviceEnabled;
-  //   PermissionStatus _permissionGranted;
-  //   LocationData _locationData;
-  //
-  //   _serviceEnabled = await location.serviceEnabled();
-  //   if (!_serviceEnabled) {
-  //     _serviceEnabled = await location.requestService();
-  //     if (!_serviceEnabled) {
-  //       return;
-  //     }
-  //   }
-  //   _permissionGranted = await location.hasPermission();
-  //   if (_permissionGranted == PermissionStatus.denied) {
-  //     _permissionGranted = await location.requestPermission();
-  //     if (_permissionGranted != PermissionStatus.granted) {
-  //       return;
-  //     }
-  //   }
-  //   _locationData = await location.getLocation();
-  //   Latitude = _locationData.speed!;
-  //   Longitude = _locationData.longitude!;
-  //   LatitudeLatitudeList.add(Latitude);
-  // }
-  //
-  // void getEverTimeLocation() {
-  //   timered = Timer.periodic(const Duration(seconds: 8), (timer) {
-  //     getLocation();
-  //     getLocationCounter++;
-  //     if (getLocationCounter <= 2) {
-  //       LatitudePointList.add(Latitude);
-  //       LongitudePointList.add(Longitude);
-  //     } else {
-  //       LatitudePointList.add(Latitude);
-  //       LongitudePointList.add(Longitude);
-  //       LatitudePointList.removeAt(0);
-  //       LongitudePointList.removeAt(0);
-  //       double latitudeDifference = LatitudePointList[1] - LatitudePointList[0];
-  //       double longitudeDifference =
-  //           LongitudePointList[1] - LongitudePointList[0];
-  //       twoPointDistance =
-  //           sqrt(pow(latitudeDifference, 2) + pow(longitudeDifference, 2));
-  //       betweenTwoPointSpeed = twoPointDistance * 10000 / 2;
-  //       averageSpeed(betweenTwoPointSpeed);
-  //       setState(() {});
-  //     }
-  //   });
-  //   timered;
-  // }
-  //
-  // void averageSpeed(double speed) {
-  //   averageSpeedList.add(speed);
-  //   if (averageSpeedList.length == 9) {
-  //     speedAverage = averageSpeedList.reduce((a, b) => a + b) / 10;
-  //     averageSpeedList.clear();
-  //     if (speedAverage <= 1) {
-  //       speedRankAfter = 1;
-  //       speedRankBefore == speedRankAfter ? judge = true : judge = false;
-  //       speedRankBefore = 1;
-  //     } else if (speedAverage <= 2) {
-  //       speedRankAfter = 2;
-  //       speedRankBefore == speedRankAfter ? judge = true : judge = false;
-  //       speedRankBefore = 2;
-  //     } else {
-  //       speedRankAfter = 3;
-  //       speedRankBefore == speedRankAfter ? judge = true : judge = false;
-  //       speedRankBefore = 3;
-  //     }
-  //     logAction(judge);
-  //   }
-  // }
-  //
-  // void logAction(bool judge) async {
-  //   if (judge == false) {
-  //     DateTime now = DateTime.now();
-  //     logTimeList.add(now.toString().substring(11, 16));
-  //     logLocationList.add(Latitude);
-  //     judge = true;
-  //   }
-  // }
-  //
-  // void timerStop() {
-  //   timered!.cancel();
-  // }
+  void judgeSpeedBrain(double speedAvg) {
+    if (speedAvg < 1.0) {
+      nowSpeedRank = 1;
+      nowSpeedRank == beforeSpeedRank ? speedList.clear() : judge = false;
+      beforeSpeedRank = 1;
+    } else if (speedAvg < 5.0) {
+      nowSpeedRank = 2;
+      nowSpeedRank == beforeSpeedRank ? speedList.clear() : judge = false;
+      beforeSpeedRank = 2;
+    } else {
+      nowSpeedRank = 3;
+      nowSpeedRank == beforeSpeedRank ? speedList.clear() : judge = false;
+      beforeSpeedRank = 3;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,73 +148,45 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 ),
               ],
             ),
-            //   SizedBox(
-            //     height: 120,
-            //     width: double.infinity,
-            //     child: LogPageTopCard(widget: widget),
-            //   ),
-            //   const SizedBox(
-            //     height: 10.0,
-            //   ),
-            //   Expanded(
-            //     flex: 10,
-            //     child: ListView.builder(
-            //       itemCount: logLocationList.length,
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Container(
-            //           margin: const EdgeInsets.only(bottom: 5.0),
-            //           padding: const EdgeInsets.symmetric(
-            //               horizontal: 15.0, vertical: 10.0),
-            //           decoration: BoxDecoration(
-            //             boxShadow: [
-            //               BoxShadow(
-            //                 color: Colors.black.withOpacity(0.3),
-            //                 blurRadius: 6.0,
-            //                 offset: const Offset(0, 5),
-            //               ),
-            //             ],
-            //             color: Colors.white,
-            //             borderRadius: BorderRadius.circular(15.0),
-            //           ),
-            //           child: Row(
-            //             children: [
-            //               Expanded(
-            //                   flex: 2,
-            //                   child:
-            //                       Text(logTimeList[index], style: customFont02)),
-            //               Expanded(
-            //                   flex: 4,
-            //                   child: Text(logLocationList[index].toString(),
-            //                       style: customFont02)),
-            //             ],
-            //           ),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            //
-            //   //for test
-            //   Expanded(
-            //     flex: 8,
-            //     child: ListView.builder(
-            //       itemCount: LatitudeLatitudeList.length,
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Container(
-            //           child: Text(
-            //               LatitudeLatitudeList[index].toString(),
-            //               style: customFont02,
-            //           ),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            //   //test end
-            //
-            //   Expanded(
-            //       flex: 1, child: Text('speed : ${Latitude.toString()} m/s')),
-            //   Expanded(flex: 1, child: Text(Longitude.toString())),
-            //   Expanded(flex: 1, child: Text(averageSpeedList.toString())),
-            //   Expanded(flex: 1, child: Text(getLocationCounter.toString())),
+            SizedBox(
+              height: 120,
+              width: double.infinity,
+              child: LogPageTopCard(widget: widget),
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Expanded(
+              flex: 10,
+              child: ListView.builder(
+                itemCount: speedLogList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 5.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 10.0),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 6.0,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(timeLogList[index]),
+                        Text('経度：${latitudeLogList[index]}'),
+                        Text('緯度：${longitudeLogList[index]}'),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
