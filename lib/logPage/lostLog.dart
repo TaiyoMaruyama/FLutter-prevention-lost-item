@@ -74,15 +74,18 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     latitudeList.add(locationData.latitude);
     longitudeList.add(locationData.longitude);
     timeList.add(DateTime.now().toString().substring(11, 16));
+    print(speedList);
+    print(latitudeList);
+    print(longitudeList);
+    print(timeList);
   }
 
   //get every time location function.
   void getLocationEveryTime() {
-    timered = Timer.periodic(const Duration(seconds: 5), (timer) {
+    timered = Timer.periodic(const Duration(seconds: 11), (timer) {
       getLocationAndSpeed();
-      judgeSpeed();
-      print(longitudeList);
       setState(() {});
+      judgeSpeed();
     });
   }
 
@@ -90,7 +93,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   void judgeSpeed() {
     List compareList;
     double compareListAverage;
-    if (speedList.length > 8) {
+    if (speedList.length >= 7) {
       compareList = speedList.sublist(0, 6);
       compareListAverage =
           compareList.reduce((value, element) => value + element) / 7;
@@ -102,9 +105,9 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
         timeLogList.add(timeList[3]);
       }
       judge = true;
-      speedLogList.removeRange(0, 6);
-      latitudeLogList.removeRange(0, 6);
-      longitudeLogList.removeRange(0, 6);
+      speedList.removeRange(0, 6);
+      latitudeList.removeRange(0, 6);
+      longitudeList.removeRange(0, 6);
       timeList.removeRange(0, 6);
     }
   }
@@ -112,16 +115,22 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   void judgeSpeedBrain(double speedAvg) {
     if (speedAvg < 1.0) {
       nowSpeedRank = 1;
-      nowSpeedRank == beforeSpeedRank ? speedList.clear() : judge = false;
-      beforeSpeedRank = 1;
+      if (nowSpeedRank != beforeSpeedRank) {
+        judge = false;
+        beforeSpeedRank = 1;
+      }
     } else if (speedAvg < 5.0) {
       nowSpeedRank = 2;
-      nowSpeedRank == beforeSpeedRank ? speedList.clear() : judge = false;
-      beforeSpeedRank = 2;
+      if (nowSpeedRank != beforeSpeedRank) {
+        judge = false;
+        beforeSpeedRank = 2;
+      }
     } else {
       nowSpeedRank = 3;
-      nowSpeedRank == beforeSpeedRank ? speedList.clear() : judge = false;
-      beforeSpeedRank = 3;
+      if (nowSpeedRank != beforeSpeedRank) {
+        judge = false;
+        beforeSpeedRank = 3;
+      }
     }
   }
 
