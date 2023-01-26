@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
 import 'package:location/location.dart';
 import 'dart:async';
@@ -50,35 +51,16 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   //get location and then speed function.
   void getLocationAndSpeed() async {
     Location location = Location();
-
-    bool serviceEnabled = false;
-    PermissionStatus permissionGranted;
     LocationData locationData;
 
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
     locationData = await location.getLocation();
     speedList.add(locationData.speed);
     latitudeList.add(locationData.latitude);
     longitudeList.add(locationData.longitude);
     timeList.add(DateTime.now().toString().substring(11, 16));
-    print(speedList);
-    print(latitudeList);
-    print(longitudeList);
-    print(timeList);
   }
+
+  void getLocationPermission() async {}
 
   //get every time location function.
   void getLocationEveryTime() {
@@ -162,9 +144,41 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
               width: double.infinity,
               child: LogPageTopCard(widget: widget),
             ),
-            const SizedBox(
-              height: 10.0,
-            ),
+            OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  elevation: 5.0,
+                ),
+                onPressed: () async {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        title: Text('位置情報について', style: customFont02),
+                        content: Text('設定画面へ遷移し、権限から位置情報を「常に許可」にしてください。',
+                            style: customFont02),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                openAppSettings();
+                                Navigator.of(context).pop(0);
+                              },
+                              child: Text('設定に移動する', style: customFont03)),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('キャンセル', style: customFont03)),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('位置情報の許可', style: customFont02)),
             Expanded(
               flex: 10,
               child: ListView.builder(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prevention_lost_item/tools/customFonts.dart';
 
 import '../logPage/lostLog.dart';
 import 'model.dart';
@@ -27,12 +28,8 @@ class _mainPageScreenState extends State<mainPageScreen> {
       body: ListView(
         children: [
           Container(
-            padding: const EdgeInsets.all(20.0),
-            child: const Text(
-              '忘れそうなものに、予めチェックを入れてください。',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+              padding: EdgeInsets.all(20.0),
+              child: Text('忘れそうなものに、予めチェックを入れてください。', style: customFont01)),
           ListTile(
             onTap: () => onAllClicked(allChecked),
             leading: Checkbox(
@@ -60,8 +57,8 @@ class _mainPageScreenState extends State<mainPageScreen> {
               onPressed: () {
                 setState(() {
                   selectedList = [];
-                  for(var element in checkBoxList){
-                    if(element.value){
+                  for (var element in checkBoxList) {
+                    if (element.value) {
                       selectedList.add(element.title);
                     }
                   }
@@ -73,7 +70,7 @@ class _mainPageScreenState extends State<mainPageScreen> {
                       builder: (context) => LostItemLogPage(selectedList)));
                 }
               },
-              child: Text('次へ'),
+              child: Text('次へ', style: customFont02,),
               style: ElevatedButton.styleFrom(
                 elevation: 0.0,
                 backgroundColor:

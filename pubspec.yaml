@@ -16,13 +16,13 @@ dependencies:
   geolocator: ^9.0.2
   flutter_background_service: ^2.4.6
   location: ^4.4.0
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
-  permission_handler: any
 
 flutter:
 
