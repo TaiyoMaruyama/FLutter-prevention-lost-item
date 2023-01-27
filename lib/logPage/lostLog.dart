@@ -119,26 +119,32 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            size: 30.0,
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.menu_outlined,
+                color: Colors.black,
+                size: 30.0,
+              )),
+        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
       body: Container(
-        padding: const EdgeInsets.only(top: 10.0),
-        margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 30.0),
+        margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.menu_outlined),
-                ),
-              ],
-            ),
             SizedBox(
               height: 120,
               width: double.infinity,
@@ -159,13 +165,21 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                   );
                 },
                 child: Text('アプリを閉じても計測', style: customFont02)),
+            const SizedBox(
+              height: 10.0,
+            ),
             Expanded(
               flex: 10,
-              child: logListView(speedLogList: speedLogList, timeLogList: timeLogList, latitudeLogList: latitudeLogList, longitudeLogList: longitudeLogList),
+              child: logListView(
+                  speedLogList: speedLogList,
+                  timeLogList: timeLogList,
+                  latitudeLogList: latitudeLogList,
+                  longitudeLogList: longitudeLogList),
             ),
             Expanded(flex: 2, child: Text(speedList.toString())),
             Expanded(
-                flex: 1, child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
+                flex: 1,
+                child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
             Expanded(flex: 1, child: Text('速度Rank：${nowSpeedRank.toString()}')),
           ],
         ),
@@ -173,6 +187,3 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     );
   }
 }
-
-
-
