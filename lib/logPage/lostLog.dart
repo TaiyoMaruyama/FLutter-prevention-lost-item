@@ -95,7 +95,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   }
 
   void judgeSpeedBrain(double speedAvg) {
-    if (speedAvg < 1.0) {
+    if (speedAvg < 1.5) {
       nowSpeedRank = 1;
       if (nowSpeedRank != beforeSpeedRank) {
         judge = false;
@@ -133,26 +133,6 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-      ),
-      endDrawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Text('text'),
-              decoration: BoxDecoration(
-                color: Color(0xFF006400),
-              ),
-            ),
-            ListTile(
-              title: Text('Los Angeles'),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text('Honolulu'),
-              onTap: () {},
-            ),
-          ],
-        ),
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
