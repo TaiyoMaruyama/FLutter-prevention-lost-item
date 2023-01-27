@@ -11,10 +11,11 @@ class mainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        fontFamily: 'NotoSerifJP-Regular.otf',
         primaryColor: Colors.orange,
         unselectedWidgetColor: Colors.black,
       ),
-      home: mainPageScreen(),
+      home: const mainPageScreen(),
     );
   }
 }

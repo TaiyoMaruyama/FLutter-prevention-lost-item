@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
 import 'package:location/location.dart';
 import 'dart:async';
+import 'logPageBrain/diaogForLocationSetting.dart';
+import 'logPageBrain/logLIstView.dart';
 import 'logPageBrain/topCardWidget.dart';
 
 class LostItemLogPage extends StatefulWidget {
@@ -43,6 +44,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   List timeLogList = [];
 
   //use in judgeSpeedBrain and judgeSpeed.
+  double compareListAverage = 0;
   late Timer timered;
   int beforeSpeedRank = 0;
   late int nowSpeedRank = 0;
@@ -66,7 +68,6 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   void getLocationEveryTime() {
     timered = Timer.periodic(const Duration(seconds: 11), (timer) {
       getLocationAndSpeed();
-      setState(() {});
       judgeSpeed();
     });
   }
@@ -74,7 +75,6 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   //judge speed rank.
   void judgeSpeed() {
     List compareList;
-    double compareListAverage;
     if (speedList.length >= 7) {
       compareList = speedList.sublist(0, 6);
       compareListAverage =
@@ -101,7 +101,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
         judge = false;
         beforeSpeedRank = 1;
       }
-    } else if (speedAvg < 5.0) {
+    } else if (speedAvg < 4.0) {
       nowSpeedRank = 2;
       if (nowSpeedRank != beforeSpeedRank) {
         judge = false;
@@ -154,65 +154,25 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        title: Text('位置情報について', style: customFont02),
-                        content: Text('設定画面へ遷移し、権限から位置情報を「常に許可」にしてください。',
-                            style: customFont02),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                openAppSettings();
-                                Navigator.of(context).pop(0);
-                              },
-                              child: Text('設定に移動する', style: customFont03)),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('キャンセル', style: customFont03)),
-                        ],
-                      );
+                      return locationSettingAlertDialog();
                     },
                   );
                 },
-                child: Text('位置情報の許可', style: customFont02)),
+                child: Text('アプリを閉じても計測', style: customFont02)),
             Expanded(
               flex: 10,
-              child: ListView.builder(
-                itemCount: speedLogList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 5.0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 10.0),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 6.0,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(timeLogList[index]),
-                        Text('経度：${latitudeLogList[index]}'),
-                        Text('緯度：${longitudeLogList[index]}'),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              child: logListView(speedLogList: speedLogList, timeLogList: timeLogList, latitudeLogList: latitudeLogList, longitudeLogList: longitudeLogList),
             ),
+            Expanded(flex: 2, child: Text(speedList.toString())),
+            Expanded(
+                flex: 1, child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
+            Expanded(flex: 1, child: Text('速度Rank：${nowSpeedRank.toString()}')),
           ],
         ),
       ),
     );
   }
 }
+
+
+

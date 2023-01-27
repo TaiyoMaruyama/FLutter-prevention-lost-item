@@ -28,7 +28,7 @@ class _mainPageScreenState extends State<mainPageScreen> {
       body: ListView(
         children: [
           Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Text('忘れそうなものに、予めチェックを入れてください。', style: customFont01)),
           ListTile(
             onTap: () => onAllClicked(allChecked),
