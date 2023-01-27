@@ -30,3 +30,4 @@ class locationSettingAlertDialog extends StatelessWidget {
     );
   }
 }
+

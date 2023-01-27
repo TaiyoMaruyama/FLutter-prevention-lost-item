@@ -21,3 +21,10 @@ TextStyle customFont03 = const TextStyle(
   color: Colors.orange,
 );
 
+TextStyle errorFont = const TextStyle(
+  fontFamily: 'NotoSerifJP Regular',
+  fontWeight: FontWeight.bold,
+  fontSize: 12.0,
+  color: Colors.red,
+);
+

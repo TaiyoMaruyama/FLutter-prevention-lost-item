@@ -60,9 +60,8 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     latitudeList.add(locationData.latitude);
     longitudeList.add(locationData.longitude);
     timeList.add(DateTime.now().toString().substring(11, 16));
+    setState(() {});
   }
-
-  void getLocationPermission() async {}
 
   //get every time location function.
   void getLocationEveryTime() {
@@ -92,6 +91,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
       longitudeList.removeRange(0, 6);
       timeList.removeRange(0, 6);
     }
+    setState(() {});
   }
 
   void judgeSpeedBrain(double speedAvg) {
@@ -119,27 +119,40 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightGreen,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: Navigator.of(context).pop,
+          onPressed: () {
+            timered.cancel();
+            Navigator.of(context).pop();
+          },
           icon: const Icon(
             Icons.arrow_back_ios,
-            color: Colors.black,
-            size: 30.0,
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.menu_outlined,
-                color: Colors.black,
-                size: 30.0,
-              )),
-        ],
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Text('text'),
+              decoration: BoxDecoration(
+                color: Color(0xFF006400),
+              ),
+            ),
+            ListTile(
+              title: Text('Los Angeles'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text('Honolulu'),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
@@ -176,7 +189,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                   latitudeLogList: latitudeLogList,
                   longitudeLogList: longitudeLogList),
             ),
-            Expanded(flex: 2, child: Text(speedList.toString())),
+            Expanded(flex: 1, child: Text(speedList.toString())),
             Expanded(
                 flex: 1,
                 child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),

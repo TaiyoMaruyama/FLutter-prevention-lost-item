@@ -31,7 +31,7 @@ class logListView extends StatelessWidget {
                 offset: const Offset(0, 5),
               ),
             ],
-            color: Colors.tealAccent,
+            color: Color(0xFF3CB371),
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Row(
@@ -45,4 +45,8 @@ class logListView extends StatelessWidget {
       },
     );
   }
+}
+
+void backgroundColorChange (){
+
 }
