@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../tools/customFonts.dart';
+
 class logListView extends StatelessWidget {
   const logListView({
     Key? key,
@@ -31,14 +33,14 @@ class logListView extends StatelessWidget {
                 offset: const Offset(0, 5),
               ),
             ],
-            color: Color(0xFF3CB371),
+            color: Color(0xFF006400),
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Row(
             children: [
-              Text(timeLogList[index]),
-              Text('緯度：${latitudeLogList[index]}'),
-              Text('経度：${longitudeLogList[index]}'),
+              Text(timeLogList[index], style: customFont03),
+              Text('緯度：${latitudeLogList[index]}', style: customFont03),
+              Text('経度：${longitudeLogList[index]}', style: customFont03),
             ],
           ),
         );
