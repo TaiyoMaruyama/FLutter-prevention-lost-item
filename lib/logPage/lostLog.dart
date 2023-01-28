@@ -50,6 +50,9 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   late int nowSpeedRank = 0;
   bool judge = true;
 
+  //test
+  int counter = 0;
+
   //get location and then speed function.
   void getLocationAndSpeed() async {
     Location location = Location();
@@ -60,14 +63,17 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     latitudeList.add(locationData.latitude);
     longitudeList.add(locationData.longitude);
     timeList.add(DateTime.now().toString().substring(11, 16));
+    counter++;
     setState(() {});
   }
 
   //get every time location function.
   void getLocationEveryTime() {
-    timered = Timer.periodic(const Duration(seconds: 11), (timer) {
-      getLocationAndSpeed();
-      judgeSpeed();
+    setState(() {
+      timered = Timer.periodic(const Duration(seconds: 11), (timer) {
+        getLocationAndSpeed();
+        judgeSpeed();
+      });
     });
   }
 
@@ -174,6 +180,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 flex: 1,
                 child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
             Expanded(flex: 1, child: Text('速度Rank：${nowSpeedRank.toString()}')),
+            Expanded(flex: 1, child: Text('代入回数：${counter.toString()}')),
           ],
         ),
       ),
