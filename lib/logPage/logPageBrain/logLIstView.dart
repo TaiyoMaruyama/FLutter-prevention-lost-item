@@ -37,6 +37,7 @@ class logListView extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(timeLogList[index], style: customFont03),
               Text('緯度：${latitudeLogList[index]}', style: customFont03),

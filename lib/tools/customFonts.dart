@@ -21,6 +21,13 @@ TextStyle customFont03 = const TextStyle(
   color: Colors.white,
 );
 
+TextStyle customFont04 = const TextStyle(
+  fontFamily: 'NotoSerifJP Regular',
+  fontWeight: FontWeight.bold,
+  fontSize: 20.0,
+  color: Colors.white,
+);
+
 TextStyle errorFont = const TextStyle(
   fontFamily: 'NotoSerifJP Regular',
   fontWeight: FontWeight.bold,

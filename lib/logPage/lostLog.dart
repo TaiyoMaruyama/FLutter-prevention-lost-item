@@ -28,7 +28,16 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   void initState() {
     super.initState();
     getLocationAndSpeed();
-    getLocationEveryTime();
+    getLocationEveryTime(countInterval);
+  }
+
+  //Drawer tools.
+  bool _active = false;
+
+  void _changed(bool active) {
+    setState(() {
+      _active = active;
+    });
   }
 
   //List
@@ -49,9 +58,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   int beforeSpeedRank = 0;
   late int nowSpeedRank = 0;
   bool judge = true;
-
-  //test
-  int counter = 0;
+  int countInterval = 20;
 
   //get location and then speed function.
   void getLocationAndSpeed() async {
@@ -63,14 +70,13 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
     latitudeList.add(locationData.latitude);
     longitudeList.add(locationData.longitude);
     timeList.add(DateTime.now().toString().substring(11, 16));
-    counter++;
     setState(() {});
   }
 
   //get every time location function.
-  void getLocationEveryTime() {
+  void getLocationEveryTime(int countTime) {
     setState(() {
-      timered = Timer.periodic(const Duration(seconds: 11), (timer) {
+      timered = Timer.periodic(Duration(seconds: countTime), (timer) {
         getLocationAndSpeed();
         judgeSpeed();
       });
@@ -80,7 +86,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
   //judge speed rank.
   void judgeSpeed() {
     List compareList;
-    if (speedList.length >= 7) {
+    if (speedList.length >= 8) {
       compareList = speedList.sublist(0, 6);
       compareListAverage =
           compareList.reduce((value, element) => value + element) / 7;
@@ -144,9 +150,37 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
         child: ListView(
           children: [
             DrawerHeader(
-              child: Text('その他の設定', style: customFont03,),
-              decoration: BoxDecoration(color: Color(0xFF006400)),
+              decoration: const BoxDecoration(color: Color(0xFF006400)),
+              child: Text('その他', style: customFont04),
             ),
+            SwitchListTile(
+              value: _active,
+              onChanged: _changed,
+              activeColor: const Color(0xFF006400),
+              title: Text('感度をよくする', style: customFont02),
+            ),
+            SizedBox(height: 100.0),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF006400),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (_active) {
+                        countInterval = 10;
+                        timered.cancel();
+                        getLocationEveryTime(countInterval);
+                      } else {
+                        countInterval = 20;
+                        timered.cancel();
+                        getLocationEveryTime(countInterval);
+                      }
+                    });
+                  },
+                  child: Text('保存', style: customFont02)),
+            )
           ],
         ),
       ),
@@ -190,7 +224,8 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 flex: 1,
                 child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
             Expanded(flex: 1, child: Text('速度Rank：${nowSpeedRank.toString()}')),
-            Expanded(flex: 1, child: Text('代入回数：${counter.toString()}')),
+            Expanded(
+                flex: 1, child: Text('速度Rank：${countInterval.toString()}')),
           ],
         ),
       ),
