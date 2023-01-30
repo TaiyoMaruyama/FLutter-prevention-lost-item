@@ -214,14 +214,14 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
               height: 10.0,
             ),
             Expanded(
-              flex: 10,
+              flex: 14,
               child: logListView(
                   speedLogList: speedLogList,
                   timeLogList: timeLogList,
                   latitudeLogList: latitudeLogList,
                   longitudeLogList: longitudeLogList),
             ),
-            Expanded(flex: 1, child: Text(speedList.toString())),
+            Expanded(flex: 3, child: Text(speedList.toString())),
             Expanded(
                 flex: 1,
                 child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),

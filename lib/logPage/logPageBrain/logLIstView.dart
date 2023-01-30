@@ -23,12 +23,14 @@ class logListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: speedLogList.length,
+      itemCount: timeLogList.length,
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
-          key: Key(speedLogList.toString()),
+          key: Key(timeLogList.toString()),
           onDismissed: (direction) {
-            speedLogList.removeAt(index);
+            timeLogList.removeAt(index);
+            latitudeLogList.removeAt(index);
+            longitudeLogList.removeAt(index);
           },
           background: Row(
             children: [
@@ -61,9 +63,16 @@ class logListView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(timeLogList[index], style: customFont03),
-                Text('緯度：${latitudeLogList[index]}', style: customFont03),
-                Text('経度：${longitudeLogList[index]}', style: customFont03),
+                Text(timeLogList[index], style: customFont04),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('緯度：${latitudeLogList[index]}', style: customFont03),
+                      Text('経度：${longitudeLogList[index]}', style: customFont03),
+                    ],
+                  ),
+                ),
                 IconButton(
                   onPressed: () {
                     _uri = Uri.parse(MapLink + latitudeLogList[index].toString() + ' , '
