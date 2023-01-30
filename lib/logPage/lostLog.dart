@@ -167,9 +167,11 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     backgroundColor: const Color(0xFF006400),
                   ),
                   onPressed: () {
+                    Navigator.of(context).pop();
                     setState(() {
                       if (_active) {
-                        countInterval = 10;
+                        /// test test
+                        countInterval = 2;
                         timered.cancel();
                         getLocationEveryTime(countInterval);
                       } else {
@@ -225,10 +227,12 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                 child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
             Expanded(flex: 1, child: Text('速度Rank：${nowSpeedRank.toString()}')),
             Expanded(
-                flex: 1, child: Text('速度Rank：${countInterval.toString()}')),
+                flex: 1, child: Text('JudgeInterval：${countInterval.toString()}')),
           ],
         ),
       ),
     );
   }
 }
+
+

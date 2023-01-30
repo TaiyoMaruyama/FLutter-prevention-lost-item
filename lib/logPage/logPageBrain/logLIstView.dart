@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../tools/customFonts.dart';
+
+String MapLink = 'https://www.google.com/maps/place/';
+late Uri _uri;
 
 class logListView extends StatelessWidget {
   const logListView({
@@ -26,8 +30,17 @@ class logListView extends StatelessWidget {
           onDismissed: (direction) {
             speedLogList.removeAt(index);
           },
-          background: Container(
-            color: const Color(0xFF006400),
+          background: Row(
+            children: [
+              const Icon(Icons.delete_forever_outlined, color: Colors.red),
+              Text('削除', style: errorFont),
+            ],
+          ),
+          secondaryBackground: Row(
+            children: [
+              Text('削除', style: errorFont),
+              const Icon(Icons.delete_forever_outlined, color: Colors.red),
+            ],
           ),
           child: Container(
             margin: const EdgeInsets.only(bottom: 5.0),
@@ -51,7 +64,11 @@ class logListView extends StatelessWidget {
                 Text('緯度：${latitudeLogList[index]}', style: customFont03),
                 Text('経度：${longitudeLogList[index]}', style: customFont03),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _uri = Uri.parse(MapLink + latitudeLogList[index].toString() + ' , '
+                        + longitudeLogList[index].toString());
+                    launchUrl(_uri);
+                  },
                   icon: const Icon(Icons.map, color: Colors.white),
                 ),
               ],
@@ -62,5 +79,3 @@ class logListView extends StatelessWidget {
     );
   }
 }
-
-void backgroundColorChange() {}
