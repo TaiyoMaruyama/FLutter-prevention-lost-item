@@ -37,6 +37,7 @@ class logListView extends StatelessWidget {
             ],
           ),
           secondaryBackground: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text('削除', style: errorFont),
               const Icon(Icons.delete_forever_outlined, color: Colors.red),
