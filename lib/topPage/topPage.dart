@@ -102,7 +102,7 @@ class _mainPageScreenState extends State<mainPageScreen> {
                   },
                   child: Text(
                     '次へ',
-                    style: customFont02,
+                    style: customFont03,
                   ),
                   style: ElevatedButton.styleFrom(
                     elevation:

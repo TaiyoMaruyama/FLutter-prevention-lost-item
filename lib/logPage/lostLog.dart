@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prevention_lost_item/tools/customFonts.dart';
 import 'package:location/location.dart';
 import 'dart:async';
+import 'logPageBrain/FloatingButtonWidget.dart';
 import 'logPageBrain/diaogForLocationSetting.dart';
 import 'logPageBrain/logLIstView.dart';
 import 'logPageBrain/topCardWidget.dart';
@@ -150,7 +151,7 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
         child: ListView(
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xFF006400)),
+              decoration: const BoxDecoration(color: Colors.lightGreen),
               child: Text('その他', style: customFont04),
             ),
             SwitchListTile(
@@ -170,22 +171,22 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
                     Navigator.of(context).pop();
                     setState(() {
                       if (_active) {
-                        /// test test
-                        countInterval = 2;
+                        countInterval = 10;
                         timered.cancel();
                         getLocationEveryTime(countInterval);
                       } else {
-                        countInterval = 20;
+                        countInterval = 12;
                         timered.cancel();
                         getLocationEveryTime(countInterval);
                       }
                     });
                   },
-                  child: Text('保存', style: customFont02)),
+                  child: Text('保存', style: customFont03)),
             )
           ],
         ),
       ),
+      floatingActionButton: FloationgButtonWidget(),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         child: Column(
@@ -214,25 +215,15 @@ class _LostItemLogPageState extends State<LostItemLogPage> {
               height: 10.0,
             ),
             Expanded(
-              flex: 14,
               child: logListView(
                   speedLogList: speedLogList,
                   timeLogList: timeLogList,
                   latitudeLogList: latitudeLogList,
                   longitudeLogList: longitudeLogList),
             ),
-            Expanded(flex: 3, child: Text(speedList.toString())),
-            Expanded(
-                flex: 1,
-                child: Text('現在の平均速度：${compareListAverage.toString()} m/s')),
-            Expanded(flex: 1, child: Text('速度Rank：${nowSpeedRank.toString()}')),
-            Expanded(
-                flex: 1, child: Text('JudgeInterval：${countInterval.toString()}')),
           ],
         ),
       ),
     );
   }
 }
-
-
